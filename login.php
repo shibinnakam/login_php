@@ -1,46 +1,22 @@
 <?php
-// Database configuration
-$host = "localhost"; // Replace with your database host
-$dbname = "db1"; // Replace with your database name
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-
-// Create a database connection
-$conn = new mysqli($host, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Hardcoded credentials
+$valid_username = "admin";
+$valid_password = "password123"; // Ideally, don't use plain text passwords like this
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    // Query to check user credentials
-    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("ss", $user, $pass);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            echo "Login successful!";
-        } else {
-            echo "Invalid username or password.";
-        }
-
-        $stmt->close();
+    // Check if credentials match
+    if ($user === $valid_username && $pass === $valid_password) {
+        echo "Login successful!";
     } else {
-        echo "Error preparing statement: " . $conn->error;
+        echo "Invalid username or password.";
     }
 }
-
-$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
